@@ -1,0 +1,1542 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SeedTech Digital Growth Proposal - Brandi</title>
+
+    <!-- CDN Links -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Tajawal:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Custom CSS */
+        :root {
+            --bg-light: #f4f4f0;
+            --card-light: #ffffff;
+            --text-primary-light: #1c1917;
+            --text-secondary-light: #57534e;
+            --border-light: #e7e5e4;
+
+            --bg-dark: #1c1917;
+            --card-dark: #292524;
+            --text-primary-dark: #e7e5e4;
+            --text-secondary-dark: #a8a29e;
+            --border-dark: #44403c;
+
+            --green-deep: #064e3b;
+            --green-lime: #84cc16;
+            --amber: #f59e0b;
+        }
+
+        /* Light & Dark Mode Variables */
+        .dark {
+            --bg-color: var(--bg-dark);
+            --card-color: var(--card-dark);
+            --text-primary: var(--text-primary-dark);
+            --text-secondary: var(--text-secondary-dark);
+            --border-color: var(--border-dark);
+        }
+
+        :root:not(.dark) {
+            --bg-color: var(--bg-light);
+            --card-color: var(--card-light);
+            --text-primary: var(--text-primary-light);
+            --text-secondary: var(--text-secondary-light);
+            --border-color: var(--border-light);
+        }
+
+        /* General Body Styling */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Arabic Font Styling */
+        .arabic {
+            font-family: 'Tajawal', sans-serif;
+        }
+
+        /* Gradient Text Styling */
+        .gradient-text {
+            background: linear-gradient(135deg, var(--green-lime), var(--green-deep));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Card Styling */
+        .card {
+            background-color: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Button Styling */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--green-lime), var(--green-deep));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(132, 204, 22, 0.3);
+        }
+        
+        /* Mobile Menu Styling */
+        .mobile-menu {
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-menu.active {
+            transform: translateX(0);
+        }
+
+        /* Fade-in Animation */
+        .fade-in {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal Styling */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--card-color);
+            border-radius: 1rem;
+            padding: 2rem;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        /* Map Region Styling */
+        .map-region {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .map-region:hover {
+            fill: var(--green-lime);
+            opacity: 0.8;
+        }
+
+        .map-region.active {
+            fill: var(--green-deep);
+        }
+
+        /* Tooltip Styling */
+        .tooltip {
+            position: absolute;
+            background: var(--card-color);
+            border: 1px solid var(--border-color);
+            border-radius: 0.5rem;
+            padding: 0.5rem;
+            font-size: 0.875rem;
+            pointer-events: none;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .tooltip.show {
+            opacity: 1;
+        }
+        
+        /* Custom Select Dropdown */
+        .custom-select-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .custom-select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: transparent;
+            border: none;
+            padding: 0.25rem 1.5rem 0.25rem 1rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .custom-select:focus {
+            outline: none;
+        }
+        .custom-select-wrapper::before { /* color dot */
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+        .custom-select-wrapper::after { /* dropdown arrow */
+            content: '';
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 0;
+            height: 0;
+            border-left: 4px solid transparent;
+            border-right: 4px solid transparent;
+            border-top: 4px solid var(--text-secondary);
+            pointer-events: none;
+        }
+        
+        .priority-High::before { background-color: #ef4444; } /* Red */
+        .priority-Medium::before { background-color: #f59e0b; } /* Amber */
+        .priority-Low::before { background-color: #3b82f6; } /* Blue */
+        .priority-Potential::before { background-color: #a8a29e; } /* Gray */
+        .priority-Growing::before { background-color: #a8a29e; } /* Gray */
+
+        /* Interactive Calendar */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 1rem;
+            padding: 1rem;
+            background-color: var(--card-color);
+        }
+        .calendar-header {
+            text-align: center;
+            font-weight: 600;
+            padding-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+        .calendar-day {
+            min-height: 120px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 0.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        .calendar-event {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.5rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        .calendar-event:hover {
+            transform: scale(1.05);
+        }
+        
+        /* Event Colors */
+        .event-blue { background-color: #dbeafe; color: #1e40af; }
+        .event-purple { background-color: #ede9fe; color: #5b21b6; }
+        .event-green { background-color: #dcfce7; color: #166534; }
+        .event-red { background-color: #fee2e2; color: #991b1b; }
+        .event-amber { background-color: #fef3c7; color: #92400e; }
+        .event-rose { background-color: #ffe4e6; color: #9f1239; }
+        .event-indigo { background-color: #e0e7ff; color: #3730a3; }
+        
+
+        /* Hide potential injected elements that cause extra space */
+        manus-content-root {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-stone-900/80 backdrop-blur-md border-b border-stone-200 dark:border-stone-700">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex items-center justify-between">
+                <!-- Logo -->
+                <div class="flex items-center space-x-4">
+                    <img src="seedtech-logo.png" alt="SeedTech Logo" class="h-8">
+                    <span class="text-stone-400">×</span>
+                    <img src="Logo_brandi.jpg" alt="Brandi Logo" class="h-8">
+                </div>
+
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex items-center space-x-6">
+                    <a href="#assessment" class="nav-link" data-en="Assessment" data-ar="التقييم">Assessment</a>
+                    <a href="#snapshots" class="nav-link" data-en="Snapshots" data-ar="لقطات">Snapshots</a>
+                    <a href="#channels" class="nav-link" data-en="Channels" data-ar="القنوات">Channels</a>
+                    <a href="#strategy" class="nav-link" data-en="Strategy" data-ar="الاستراتيجية">Strategy</a>
+                    <a href="#planning" class="nav-link" data-en="Planning" data-ar="التخطيط">Planning</a>
+                    <a href="#budget" class="nav-link" data-en="Budget" data-ar="الميزانية">Budget</a>
+                </nav>
+
+                <!-- Controls -->
+                <div class="flex items-center space-x-4">
+                    <!-- Language Toggle -->
+                    <div class="flex items-center space-x-2">
+                        <button id="lang-en" class="lang-btn active px-3 py-1 rounded text-sm font-medium">EN</button>
+                        <button id="lang-ar" class="lang-btn px-3 py-1 rounded text-sm font-medium">AR</button>
+                    </div>
+
+                    <!-- Theme Toggle -->
+                    <button id="theme-toggle" class="p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800">
+                        <i data-feather="sun" class="w-5 h-5 dark:hidden"></i>
+                        <i data-feather="moon" class="w-5 h-5 hidden dark:block"></i>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800">
+                        <i data-feather="menu" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="mobile-menu md:hidden fixed top-0 left-0 w-64 h-full bg-white dark:bg-stone-900 border-r border-stone-200 dark:border-stone-700 z-40">
+            <div class="p-4">
+                <div class="flex items-center justify-between mb-6">
+                    <div class="text-xl font-bold gradient-text">Menu</div>
+                    <button id="mobile-menu-close" class="p-2 rounded-lg hover:bg-stone-100 dark:hover:bg-stone-800">
+                        <i data-feather="x" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                <nav class="space-y-4">
+                    <a href="#assessment" class="block nav-link" data-en="Assessment" data-ar="التقييم">Assessment</a>
+                    <a href="#snapshots" class="block nav-link" data-en="Snapshots" data-ar="لقطات">Snapshots</a>
+                    <a href="#channels" class="block nav-link" data-en="Channels" data-ar="القنوات">Channels</a>
+                    <a href="#strategy" class="block nav-link" data-en="Strategy" data-ar="الاستراتيجية">Strategy</a>
+                    <a href="#planning" class="block nav-link" data-en="Planning" data-ar="التخطيط">Planning</a>
+                    <a href="#budget" class="block nav-link" data-en="Budget" data-ar="الميزانية">Budget</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="py-20 px-4">
+        <div class="container mx-auto text-center">
+            <h1 class="text-5xl md:text-7xl font-bold mb-6 fade-in">
+                <span data-en="Cultivating" data-ar="زراعة">Cultivating</span>
+                <span class="gradient-text" data-en="Digital Growth" data-ar="النمو الرقمي">Digital Growth</span>
+                <span data-en="for SeedTech" data-ar="لسيد تك">for SeedTech</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-stone-600 dark:text-stone-400 mb-8 fade-in" style="animation-delay: 0.2s">
+                <span data-en="An advanced interactive proposal by" data-ar="اقتراح تفاعلي متقدم من">An advanced interactive proposal by</span>
+                <span class="font-semibold text-amber-500" data-en="Brandi" data-ar="براندي">Brandi</span>
+                <span data-en="to establish SeedTech as the premier agricultural solutions provider." data-ar="لتأسيس سيد تك كمزود حلول زراعية رائد.">to establish SeedTech as the premier agricultural solutions provider.</span>
+            </p>
+            <img src="hero-image.jpg" alt="Green seedlings in field" class="mx-auto rounded-2xl shadow-2xl max-w-full h-auto">
+        </div>
+    </section>
+
+    <!-- Objectives Section -->
+    <section id="objectives" class="py-16 px-4 bg-stone-50 dark:bg-stone-900">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text" data-en="Our Objectives" data-ar="أهدافنا">Our Objectives</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                <div class="card p-6 text-center fade-in">
+                    <img src="awareness.jpg" alt="Brand Awareness" class="w-24 h-24 mx-auto mb-4 rounded-full object-cover">
+                    <h3 class="font-semibold mb-2" data-en="Brand Awareness" data-ar="الوعي بالعلامة التجارية">Brand Awareness</h3>
+                </div>
+                <div class="card p-6 text-center fade-in" style="animation-delay: 0.1s">
+                    <img src="Positioning.jpg" alt="Brand Positioning" class="w-24 h-24 mx-auto mb-4 rounded-full object-cover">
+                    <h3 class="font-semibold mb-2" data-en="Brand Positioning" data-ar="موقع العلامة التجارية">Brand Positioning</h3>
+                </div>
+                <div class="card p-6 text-center fade-in" style="animation-delay: 0.2s">
+                    <img src="Buzz.jpg" alt="Social Media Buzz" class="w-24 h-24 mx-auto mb-4 rounded-full object-cover">
+                    <h3 class="font-semibold mb-2" data-en="Social Media Buzz" data-ar="ضجة وسائل التواصل">Social Media Buzz</h3>
+                </div>
+                <div class="card p-6 text-center fade-in" style="animation-delay: 0.3s">
+                    <img src="Followers.jpg" alt="Increase Followers" class="w-24 h-24 mx-auto mb-4 rounded-full object-cover">
+                    <h3 class="font-semibold mb-2" data-en="Increase Followers" data-ar="زيادة المتابعين">Increase Followers</h3>
+                </div>
+                <div class="card p-6 text-center fade-in" style="animation-delay: 0.4s">
+                    <img src="ngagement.jpg" alt="Increase Engagement" class="w-24 h-24 mx-auto mb-4 rounded-full object-cover">
+                    <h3 class="font-semibold mb-2" data-en="Increase Engagement" data-ar="زيادة التفاعل">Increase Engagement</h3>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Foundation Section -->
+    <section id="brand-foundation" class="py-16 px-4">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text" data-en="Brand Foundation" data-ar="أساس العلامة التجارية">Brand Foundation</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Company Profile -->
+                <div class="card p-8 fade-in">
+                    <h3 class="text-2xl font-bold mb-4 text-green-700" data-en="Company Profile" data-ar="ملف الشركة">Company Profile</h3>
+                    <p class="text-stone-600 dark:text-stone-400 leading-relaxed" data-en="Since 2012, SeedTech has partnered with Technisem to improve agricultural productivity via high-quality seeds and agronomic expertise. Now expanding from Sudan to Oman and Uganda, SeedTech is a visionary leader in regional food security." data-ar="منذ عام 2012، تشارك سيد تك مع تكنيسيم لتحسين الإنتاجية الزراعية من خلال البذور عالية الجودة والخبرة الزراعية. تتوسع الآن من السودان إلى عمان وأوغندا، سيد تك رائدة بصيرة في الأمن الغذائي الإقليمي.">
+                        Since 2012, SeedTech has partnered with Technisem to improve agricultural productivity via high-quality seeds and agronomic expertise. Now expanding from Sudan to Oman and Uganda, SeedTech is a visionary leader in regional food security.
+                    </p>
+                </div>
+
+                <!-- Brand Identity Pillars -->
+                <div class="card p-8 fade-in" style="animation-delay: 0.2s">
+                    <h3 class="text-2xl font-bold mb-4 text-green-700" data-en="Brand Identity Pillars" data-ar="ركائز هوية العلامة التجارية">Brand Identity Pillars</h3>
+                    <div class="space-y-4">
+                        <div class="flex items-start space-x-3">
+                            <i data-feather="check-circle" class="w-5 h-5 text-green-600 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold" data-en="Quality" data-ar="الجودة">Quality</h4>
+                                <p class="text-sm text-stone-600 dark:text-stone-400" data-en="Uncompromising excellence in every seed and consultation." data-ar="التميز بلا تنازل في كل بذرة واستشارة.">
+                                    Uncompromising excellence in every seed and consultation.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <i data-feather="check-circle" class="w-5 h-5 text-green-600 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold" data-en="Expertise" data-ar="الخبرة">Expertise</h4>
+                                <p class="text-sm text-stone-600 dark:text-stone-400" data-en="Demonstrating deep technical knowledge and dependable support." data-ar="إظهار المعرفة التقنية العميقة والدعم الموثوق.">
+                                    Demonstrating deep technical knowledge and dependable support.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <i data-feather="check-circle" class="w-5 h-5 text-green-600 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold" data-en="Innovation" data-ar="الابتكار">Innovation</h4>
+                                <p class="text-sm text-stone-600 dark:text-stone-400" data-en="Highlighting premium varieties and modern Agri-Tech." data-ar="تسليط الضوء على الأصناف المتميزة والتكنولوجيا الزراعية الحديثة.">
+                                    Highlighting premium varieties and modern Agri-Tech.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-3">
+                            <i data-feather="check-circle" class="w-5 h-5 text-green-600 mt-1"></i>
+                            <div>
+                                <h4 class="font-semibold" data-en="Education" data-ar="التعليم">Education</h4>
+                                <p class="text-sm text-stone-600 dark:text-stone-400" data-en="Making complex agronomy accessible and practical for all." data-ar="جعل علم الزراعة المعقد متاحاً وعملياً للجميع.">
+                                    Making complex agronomy accessible and practical for all.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Initial Assessment Section -->
+    <section id="assessment" class="py-16 px-4 bg-stone-50 dark:bg-stone-900">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text" data-en="Initial Assessment" data-ar="التقييم الأولي">Initial Assessment</h2>
+
+            <!-- Baseline Data -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold mb-8 text-center" data-en="Baseline Data" data-ar="البيانات الأساسية">Baseline Data</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Sudan -->
+                    <div class="card p-6 fade-in">
+                        <h4 class="text-xl font-bold mb-4 text-green-700" data-en="SeedTech Sudan" data-ar="سيد تك السودان">SeedTech Sudan</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="facebook" class="w-4 h-4 mr-2"></i>Facebook</span>
+                                <span class="font-semibold">11,000 <span class="text-green-600 text-sm">(+20%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="linkedin" class="w-4 h-4 mr-2"></i>LinkedIn</span>
+                                <span class="font-semibold">881 <span class="text-green-600 text-sm">(+50%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="instagram" class="w-4 h-4 mr-2"></i>Instagram</span>
+                                <span class="font-semibold">182 <span class="text-green-600 text-sm">(+450%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="youtube" class="w-4 h-4 mr-2"></i>YouTube</span>
+                                <span class="font-semibold">125 <span class="text-green-600 text-sm">(+300%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="music" class="w-4 h-4 mr-2"></i>TikTok</span>
+                                <span class="font-semibold">28 <span class="text-green-600 text-sm">(+1500%)</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Uganda -->
+                    <div class="card p-6 fade-in" style="animation-delay: 0.1s">
+                        <h4 class="text-xl font-bold mb-4 text-green-700" data-en="Agriganda (Uganda)" data-ar="أجريجاندا (أوغندا)">Agriganda (Uganda)</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="facebook" class="w-4 h-4 mr-2"></i>Facebook</span>
+                                <span class="font-semibold">8 <span class="text-green-600 text-sm">(+12400%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="instagram" class="w-4 h-4 mr-2"></i>Instagram</span>
+                                <span class="font-semibold">2 <span class="text-green-600 text-sm">(+24900%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="music" class="w-4 h-4 mr-2"></i>TikTok</span>
+                                <span class="font-semibold">16 <span class="text-green-600 text-sm">(+3025%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="youtube" class="w-4 h-4 mr-2"></i>YouTube</span>
+                                <span class="font-semibold">250 <span class="text-green-600 text-sm">(New)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="linkedin" class="w-4 h-4 mr-2"></i>LinkedIn</span>
+                                <span class="font-semibold">200 <span class="text-green-600 text-sm">(New)</span></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Oman -->
+                    <div class="card p-6 fade-in" style="animation-delay: 0.2s">
+                        <h4 class="text-xl font-bold mb-4 text-green-700" data-en="WOGUD (Oman)" data-ar="وجود (عمان)">WOGUD (Oman)</h4>
+                        <div class="space-y-3">
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="facebook" class="w-4 h-4 mr-2"></i>Facebook</span>
+                                <span class="font-semibold">18 <span class="text-green-600 text-sm">(+5456%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="instagram" class="w-4 h-4 mr-2"></i>Instagram</span>
+                                <span class="font-semibold">4 <span class="text-green-600 text-sm">(+12400%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="music" class="w-4 h-4 mr-2"></i>TikTok</span>
+                                <span class="font-semibold">16 <span class="text-green-600 text-sm">(+6150%)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="youtube" class="w-4 h-4 mr-2"></i>YouTube</span>
+                                <span class="font-semibold">300 <span class="text-green-600 text-sm">(New)</span></span>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="flex items-center"><i data-feather="linkedin" class="w-4 h-4 mr-2"></i>LinkedIn</span>
+                                <span class="font-semibold">500 <span class="text-green-600 text-sm">(New)</span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interactive Channel Analysis -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold mb-8 text-center" data-en="Interactive Channel Analysis" data-ar="تحليل القنوات التفاعلي">Interactive Channel Analysis</h3>
+                <div class="card p-8">
+                    <!-- Region Selector -->
+                    <div class="flex justify-center mb-6">
+                        <div class="flex space-x-2 bg-stone-100 dark:bg-stone-800 rounded-lg p-1">
+                            <button class="region-btn active px-4 py-2 rounded-md font-medium" data-region="sudan" data-en="Sudan" data-ar="السودان">Sudan</button>
+                            <button class="region-btn px-4 py-2 rounded-md font-medium" data-region="uganda" data-en="Uganda" data-ar="أوغندا">Uganda</button>
+                            <button class="region-btn px-4 py-2 rounded-md font-medium" data-region="oman" data-en="Oman" data-ar="عمان">Oman</button>
+                        </div>
+                    </div>
+
+                    <!-- Chart Container -->
+                    <div class="mb-6 h-64 md:h-80">
+                        <canvas id="channelChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <!-- Analysis Text -->
+                    <div id="analysisText" class="text-stone-600 dark:text-stone-400 leading-relaxed">
+                        <p data-en="SeedTech Sudan has a formidable presence on Facebook (11k) with strong engagement rates and a loyal community. The significant following on LinkedIn (881) indicates strong B2B potential, while the rapid growth on Instagram (182, +450%) and TikTok (28, +1500%) shows promising momentum in visual and short-form content." data-ar="تتمتع سيد تك السودان بحضور قوي على فيسبوك (11 ألف) مع معدلات تفاعل قوية ومجتمع مخلص. المتابعة الكبيرة على لينكد إن (881) تشير إلى إمكانات قوية في مجال الأعمال، بينما النمو السريع على إنستغرام (182، +450%) وتيك توك (28، +1500%) يظهر زخماً واعداً في المحتوى المرئي والقصير.">
+                            SeedTech Sudan has a formidable presence on Facebook (11k) with strong engagement rates and a loyal community. The significant following on LinkedIn (881) indicates strong B2B potential, while the rapid growth on Instagram (182, +450%) and TikTok (28, +1500%) shows promising momentum in visual and short-form content.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommendations -->
+            <div>
+                <h3 class="text-2xl font-bold mb-8 text-center" data-en="Regional Recommendations" data-ar="التوصيات الإقليمية">Regional Recommendations</h3>
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <!-- Sudan Recommendations -->
+                    <div class="card p-6 fade-in">
+                        <h4 class="text-xl font-bold mb-4 text-green-700" data-en="For Sudan: Deepen & Diversify" data-ar="للسودان: التعمق والتنويع">For Sudan: Deepen & Diversify</h4>
+                        <p class="text-stone-600 dark:text-stone-400 leading-relaxed" data-en="Leverage the strong Facebook base with community engagement (Q&As, contests). Activate LinkedIn for targeted B2B outreach to agricultural cooperatives and government agencies. Capitalize on Instagram and TikTok growth with educational content and behind-the-scenes farming stories." data-ar="الاستفادة من قاعدة فيسبوك القوية مع مشاركة المجتمع (الأسئلة والأجوبة، المسابقات). تفعيل لينكد إن للتواصل المستهدف مع التعاونيات الزراعية والوكالات الحكومية. الاستفادة من نمو إنستغرام وتيك توك بالمحتوى التعليمي وقصص الزراعة من وراء الكواليس.">
+                            Leverage the strong Facebook base with community engagement (Q&As, contests). Activate LinkedIn for targeted B2B outreach to agricultural cooperatives and government agencies. Capitalize on Instagram and TikTok growth with educational content and behind-the-scenes farming stories.
+                        </p>
+                    </div>
+
+                    <!-- Uganda Recommendations -->
+                    <div class="card p-6 fade-in" style="animation-delay: 0.1s">
+                        <h4 class="text-xl font-bold mb-4 text-green-700" data-en="For Uganda: Build & Engage" data-ar="لأوغندا: البناء والمشاركة">For Uganda: Build & Engage</h4>
+                        <p class="text-stone-600 dark:text-stone-400 leading-relaxed" data-en="Establish a foundational presence on Facebook with farmer success stories and practical tips. Capitalize on early TikTok traction with quick farming hacks and seed variety showcases. Launch a YouTube channel focused on comprehensive agricultural education and seasonal farming guides." data-ar="إنشاء حضور أساسي على فيسبوك مع قصص نجاح المزارعين والنصائح العملية. الاستفادة من الجذب المبكر لتيك توك مع حيل الزراعة السريعة وعروض أصناف البذور. إطلاق قناة يوتيوب تركز على التعليم الزراعي الشامل وأدلة الزراعة الموسمية.">
+                            Establish a foundational presence on Facebook with farmer success stories and practical tips. Capitalize on early TikTok traction with quick farming hacks and seed variety showcases. Launch a YouTube channel focused on comprehensive agricultural education and seasonal farming guides.
+                        </p>
+                    </div>
+
+                    <!-- Oman Recommendations -->
+                    <div class="card p-6 fade-in" style="animation-delay: 0.2s">
+                        <h4 class="text-xl font-bold mb-4 text-green-700" data-en="For Oman: Position & Connect" data-ar="لعمان: الموقع والاتصال">For Oman: Position & Connect</h4>
+                        <p class="text-stone-600 dark:text-stone-400 leading-relaxed" data-en="Prioritize LinkedIn for professional networking with agricultural businesses and government initiatives. Use Instagram to create a premium, tech-focused brand image showcasing modern farming techniques. Develop YouTube content highlighting water-efficient farming solutions relevant to arid climates." data-ar="إعطاء الأولوية للينكد إن للشبكات المهنية مع الأعمال الزراعية والمبادرات الحكومية. استخدام إنستغرام لإنشاء صورة علامة تجارية متميزة تركز على التكنولوجيا وتعرض تقنيات الزراعة الحديثة. تطوير محتوى يوتيوب يسلط الضوء على حلول الزراعة الموفرة للمياه ذات الصلة بالمناخات الجافة.">
+                            Prioritize LinkedIn for professional networking with agricultural businesses and government initiatives. Use Instagram to create a premium, tech-focused brand image showcasing modern farming techniques. Develop YouTube content highlighting water-efficient farming solutions relevant to arid climates.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Performance & KPIs Section -->
+    <section id="snapshots" class="py-16 px-4">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text" data-en="Performance Snapshots" data-ar="لقطات الأداء">Performance Snapshots</h2>
+
+            <!-- Key Metrics -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6 mb-12">
+                <div class="card p-6 text-center fade-in">
+                    <div class="text-3xl font-bold text-green-600 mb-2">12.1K</div>
+                    <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Fans & Followers" data-ar="المعجبون والمتابعون">Fans & Followers</div>
+                </div>
+                <div class="card p-6 text-center fade-in" style="animation-delay: 0.1s">
+                    <div class="text-3xl font-bold text-green-600 mb-2">71.2K</div>
+                    <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Reach" data-ar="الوصول">Reach</div>
+                </div>
+                <div class="card p-6 text-center fade-in" style="animation-delay: 0.2s">
+                    <div class="text-3xl font-bold text-green-600 mb-2">189.3K</div>
+                    <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Impressions" data-ar="الانطباعات">Impressions</div>
+                </div>
+                <div class="card p-6 text-center fade-in" style="animation-delay: 0.3s">
+                    <div class="text-3xl font-bold text-green-600 mb-2">15.8%</div>
+                    <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Engagement Rate" data-ar="معدل التفاعل">Engagement Rate</div>
+                </div>
+                <div class="card p-6 text-center fade-in" style="animation-delay: 0.4s">
+                    <div class="text-3xl font-bold text-green-600 mb-2">25.4K</div>
+                    <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Video Views" data-ar="مشاهدات الفيديو">Video Views</div>
+                </div>
+                <div class="card p-6 text-center fade-in" style="animation-delay: 0.5s">
+                    <div class="text-3xl font-bold text-green-600 mb-2">1.2K</div>
+                    <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Shares" data-ar="المشاركات">Shares</div>
+                </div>
+            </div>
+
+            <!-- Channel Performance Breakdown -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold mb-8 text-center" data-en="Channel Performance Breakdown" data-ar="تفصيل أداء القنوات">Channel Performance Breakdown</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6">
+                    <div class="card p-6 text-center fade-in">
+                        <i data-feather="facebook" class="w-8 h-8 mx-auto mb-4 text-blue-600"></i>
+                        <h4 class="font-bold mb-2">Facebook</h4>
+                        <div class="text-2xl font-bold text-blue-600 mb-1">11.0K</div>
+                        <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Followers" data-ar="متابعون">Followers</div>
+                        <div class="text-xs text-green-600 mt-2">+20% growth</div>
+                    </div>
+                    <div class="card p-6 text-center fade-in" style="animation-delay: 0.1s">
+                        <i data-feather="instagram" class="w-8 h-8 mx-auto mb-4 text-pink-600"></i>
+                        <h4 class="font-bold mb-2">Instagram</h4>
+                        <div class="text-2xl font-bold text-pink-600 mb-1">186</div>
+                        <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Followers" data-ar="متابعون">Followers</div>
+                        <div class="text-xs text-green-600 mt-2">+450% growth</div>
+                    </div>
+                    <div class="card p-6 text-center fade-in" style="animation-delay: 0.2s">
+                        <i data-feather="linkedin" class="w-8 h-8 mx-auto mb-4 text-blue-700"></i>
+                        <h4 class="font-bold mb-2">LinkedIn</h4>
+                        <div class="text-2xl font-bold text-blue-700 mb-1">1.6K</div>
+                        <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Connections" data-ar="اتصالات">Connections</div>
+                        <div class="text-xs text-green-600 mt-2">+65% growth</div>
+                    </div>
+                    <div class="card p-6 text-center fade-in" style="animation-delay: 0.3s">
+                        <i data-feather="youtube" class="w-8 h-8 mx-auto mb-4 text-red-600"></i>
+                        <h4 class="font-bold mb-2">YouTube</h4>
+                        <div class="text-2xl font-bold text-red-600 mb-1">675</div>
+                        <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Subscribers" data-ar="مشتركون">Subscribers</div>
+                        <div class="text-xs text-green-600 mt-2">New channel</div>
+                    </div>
+                    <div class="card p-6 text-center fade-in" style="animation-delay: 0.4s">
+                        <i data-feather="music" class="w-8 h-8 mx-auto mb-4 text-black dark:text-white"></i>
+                        <h4 class="font-bold mb-2">TikTok</h4>
+                        <div class="text-2xl font-bold text-black dark:text-white mb-1">60</div>
+                        <div class="text-sm text-stone-600 dark:text-stone-400" data-en="Followers" data-ar="متابعون">Followers</div>
+                        <div class="text-xs text-green-600 mt-2">+2500% growth</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel Insights Summary -->
+            <div class="card p-8 fade-in">
+                <h3 class="text-2xl font-bold mb-6 text-green-700" data-en="Channel Insights Summary" data-ar="ملخص رؤى القنوات">Channel Insights Summary</h3>
+                <p class="text-stone-600 dark:text-stone-400 leading-relaxed" data-en="Facebook is our bedrock platform with the largest, most engaged audience across all regions. Instagram is our growth engine, showing exceptional momentum particularly in Sudan with 450% growth. LinkedIn offers strong B2B potential with professional agricultural networks. YouTube offers a platform for in-depth educational content, while TikTok provides an avenue for rapid, viral brand awareness with remarkable growth rates exceeding 1500% in established markets." data-ar="فيسبوك هو منصتنا الأساسية مع أكبر جمهور متفاعل عبر جميع المناطق. إنستغرام هو محرك نمونا، يظهر زخماً استثنائياً خاصة في السودان بنمو 450%. لينكد إن يوفر إمكانات قوية في مجال الأعمال مع الشبكات الزراعية المهنية. يوتيوب يوفر منصة للمحتوى التعليمي المتعمق، بينما تيك توك يوفر طريقاً للوعي السريع والفيروسي بالعلامة التجارية مع معدلات نمو ملحوظة تتجاوز 1500% في الأسواق الراسخة.">
+                    Facebook is our bedrock platform with the largest, most engaged audience across all regions. Instagram is our growth engine, showing exceptional momentum particularly in Sudan with 450% growth. LinkedIn offers strong B2B potential with professional agricultural networks. YouTube offers a platform for in-depth educational content, while TikTok provides an avenue for rapid, viral brand awareness with remarkable growth rates exceeding 1500% in established markets.
+                </p>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Channel Strategy & Regional Focus Section -->
+    <section id="channels" class="py-16 px-4 bg-stone-50 dark:bg-stone-900">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text" data-en="Channel Strategy & Regional Focus" data-ar="استراتيجية القنوات والتركيز الإقليمي">Channel Strategy & Regional Focus</h2>
+
+            <!-- Interactive Map -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold mb-8 text-center" data-en="Regional Presence Map" data-ar="خريطة الحضور الإقليمي">Regional Presence Map</h3>
+                <div class="card p-4 md:p-8">
+                    <div class="relative">
+                        <svg id="regionMap" viewBox="0 0 800 400" class="w-full h-auto max-w-4xl mx-auto">
+                            <!-- A simplified map path for demonstration -->
+                            <path d="M200,50 Q250,40 300,60 Q350,50 400,70 Q450,60 500,80 Q520,100 530,140 Q540,180 520,220 Q500,260 480,300 Q450,340 400,360 Q350,370 300,360 Q250,350 200,340 Q150,320 130,280 Q120,240 130,200 Q140,160 150,120 Q160,80 200,50 Z" fill="#e7e5e4" stroke="#a8a29e" stroke-width="2" class="africa-outline"/>
+
+                            <!-- Markers for regions -->
+                            <circle id="sudan-marker" cx="380" cy="150" r="15" fill="#84cc16" class="map-region active" data-region="sudan" data-tooltip="Sudan: 11,000+ followers"/>
+                            <text x="380" y="135" text-anchor="middle" font-size="12" font-weight="bold" fill="#064e3b">Sudan</text>
+
+                            <circle id="uganda-marker" cx="350" cy="200" r="10" fill="#f59e0b" class="map-region" data-region="uganda" data-tooltip="Uganda: Growing presence"/>
+                            <text x="350" y="225" text-anchor="middle" font-size="12" font-weight="bold" fill="#064e3b">Uganda</text>
+
+                            <circle id="oman-marker" cx="450" cy="120" r="10" fill="#f59e0b" class="map-region" data-region="oman" data-tooltip="Oman: New market opportunity"/>
+                            <text x="450" y="105" text-anchor="middle" font-size="12" font-weight="bold" fill="#064e3b">Oman</text>
+                        </svg>
+                        <div id="mapTooltip" class="tooltip"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Channel Priorities by Region -->
+            <div class="mb-12">
+                 <h3 class="text-2xl font-bold mb-8 text-center" data-en="Channel Priorities by Region" data-ar="أولويات القنوات حسب المنطقة">Channel Priorities by Region</h3>
+                <div class="card p-8">
+                     <!-- Region Selector -->
+                    <div class="flex justify-center mb-6">
+                        <div class="flex space-x-2 bg-stone-100 dark:bg-stone-800 rounded-full p-1">
+                            <button class="priority-region-btn active px-4 py-2 rounded-full font-medium text-sm" data-region="sudan" data-en="Sudan" data-ar="السودان">Sudan</button>
+                            <button class="priority-region-btn px-4 py-2 rounded-full font-medium text-sm" data-region="oman" data-en="Oman" data-ar="عمان">Oman</button>
+                            <button class="priority-region-btn px-4 py-2 rounded-full font-medium text-sm" data-region="uganda" data-en="Uganda" data-ar="أوغندا">Uganda</button>
+                        </div>
+                    </div>
+                    <div id="channel-priorities-container" class="space-y-4">
+                        <!-- Channel priorities will be dynamically inserted here -->
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Regional Insights -->
+            <div>
+                <h3 class="text-2xl font-bold mb-8 text-center" data-en="Regional Digital Insights" data-ar="رؤى رقمية إقليمية">Regional Digital Insights</h3>
+                <div id="regionalInsights" class="card p-8 fade-in">
+                    <div class="regional-insight active" data-region="sudan">
+                        <h4 class="text-xl font-bold mb-4 text-green-700" data-en="Sudan Digital Landscape" data-ar="المشهد الرقمي السوداني">Sudan Digital Landscape</h4>
+                        <p class="text-stone-600 dark:text-stone-400 leading-relaxed" data-en="Sudan's digital landscape is dominated by Facebook and WhatsApp, with over 70% of internet users active on these platforms. The agricultural sector shows strong engagement with educational content, particularly video tutorials and Q&A sessions. LinkedIn is gaining traction among agricultural professionals and government agencies, making it ideal for B2B outreach." data-ar="يهيمن فيسبوك وواتساب على المشهد الرقمي السوداني، حيث يكون أكثر من 70% من مستخدمي الإنترنت نشطين على هذه المنصات. يظهر القطاع الزراعي تفاعلاً قوياً مع المحتوى التعليمي، خاصة الدروس المرئية وجلسات الأسئلة والأجوبة. يكتسب لينكد إن زخماً بين المهنيين الزراعيين والوكالات الحكومية، مما يجعله مثالياً للتواصل التجاري.">
+                            Sudan's digital landscape is dominated by Facebook and WhatsApp, with over 70% of internet users active on these platforms. The agricultural sector shows strong engagement with educational content, particularly video tutorials and Q&A sessions. LinkedIn is gaining traction among agricultural professionals and government agencies, making it ideal for B2B outreach.
+                        </p>
+                    </div>
+                    <div class="regional-insight" data-region="uganda" style="display: none;">
+                        <h4 class="text-xl font-bold mb-4 text-green-700" data-en="Uganda Digital Landscape" data-ar="المشهد الرقمي الأوغندي">Uganda Digital Landscape</h4>
+                        <p class="text-stone-600 dark:text-stone-400 leading-relaxed" data-en="In Uganda, Facebook remains the most popular platform with high engagement rates among farmers and agricultural communities. The rapid growth of YouTube for educational content presents a key opportunity, as farmers increasingly seek video-based learning. TikTok is emerging as a powerful tool for reaching younger farmers with quick, actionable agricultural tips." data-ar="في أوغندا، يبقى فيسبوك المنصة الأكثر شعبية مع معدلات تفاعل عالية بين المزارعين والمجتمعات الزراعية. النمو السريع ليوتيوب للمحتوى التعليمي يقدم فرصة رئيسية، حيث يسعى المزارعون بشكل متزايد للتعلم القائم على الفيديو. تيك توك يبرز كأداة قوية للوصول إلى المزارعين الأصغر سناً بنصائح زراعية سريعة وقابلة للتطبيق.">
+                            In Uganda, Facebook remains the most popular platform with high engagement rates among farmers and agricultural communities. The rapid growth of YouTube for educational content presents a key opportunity, as farmers increasingly seek video-based learning. TikTok is emerging as a powerful tool for reaching younger farmers with quick, actionable agricultural tips.
+                        </p>
+                    </div>
+                    <div class="regional-insight" data-region="oman" style="display: none;">
+                        <h4 class="text-xl font-bold mb-4 text-green-700" data-en="Oman Digital Landscape" data-ar="المشهد الرقمي العماني">Oman Digital Landscape</h4>
+                        <p class="text-stone-600 dark:text-stone-400 leading-relaxed" data-en="Oman has a high internet penetration rate with strong usage of Instagram for visual branding and LinkedIn for B2B connections. The agricultural sector is increasingly tech-savvy, with government initiatives promoting digital agriculture. YouTube content focusing on water-efficient farming and modern agricultural techniques resonates well with the audience." data-ar="عمان لديها معدل اختراق إنترنت عالي مع استخدام قوي لإنستغرام للعلامة التجارية المرئية ولينكد إن للاتصالات التجارية. القطاع الزراعي يصبح أكثر إلماماً بالتكنولوجيا، مع مبادرات حكومية تروج للزراعة الرقمية. محتوى يوتيوب الذي يركز على الزراعة الموفرة للمياه والتقنيات الزراعية الحديثة يلقى صدى جيداً مع الجمهور.">
+                            Oman has a high internet penetration rate with strong usage of Instagram for visual branding and LinkedIn for B2B connections. The agricultural sector is increasingly tech-savvy, with government initiatives promoting digital agriculture. YouTube content focusing on water-efficient farming and modern agricultural techniques resonates well with the audience.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Content Strategy & Planning Section -->
+    <section id="strategy" class="py-16 px-4">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text" data-en="Content Strategy & Planning" data-ar="استراتيجية المحتوى والتخطيط">Content Strategy & Planning</h2>
+
+            <!-- Interactive Content Calendar -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold mb-8 text-center" data-en="Interactive Content Calendar" data-ar="تقويم المحتوى التفاعلي">Interactive Content Calendar</h3>
+                <div class="calendar-grid">
+                    <div class="calendar-header" data-en="Mon" data-ar="الإثنين">Mon</div>
+                    <div class="calendar-header" data-en="Tue" data-ar="الثلاثاء">Tue</div>
+                    <div class="calendar-header" data-en="Wed" data-ar="الأربعاء">Wed</div>
+                    <div class="calendar-header" data-en="Thu" data-ar="الخميس">Thu</div>
+                    <div class="calendar-header" data-en="Fri" data-ar="الجمعة">Fri</div>
+                    <div class="calendar-header" data-en="Sat" data-ar="السبت">Sat</div>
+                    <div class="calendar-header" data-en="Sun" data-ar="الأحد">Sun</div>
+                    
+                    <!-- Week 1 -->
+                    <div class="calendar-day">
+                        <div class="calendar-event event-blue" data-content="blog">Blog Post</div>
+                        <div class="calendar-event event-rose" data-content="tiktok">TikTok Tip</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-event event-purple" data-content="qa">Farmer Q&A</div>
+                        <div class="calendar-event event-blue" data-content="blog2">Blog Post</div>
+                    </div>
+                    <div class="calendar-day">
+                         <div class="calendar-event event-green" data-content="competition">Competition</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-event event-red" data-content="video">YouTube Video</div>
+                    </div>
+                    <div class="calendar-day">
+                        <div class="calendar-event event-amber" data-content="testimonial">Testimonial</div>
+                    </div>
+                    <div class="calendar-day"></div>
+                    <div class="calendar-day">
+                         <div class="calendar-event event-indigo" data-content="ig-reel">IG Reel</div>
+                    </div>
+                     <!-- Week 2-4 Empty for brevity -->
+                </div>
+            </div>
+
+            <!-- Content Themes -->
+            <div>
+                <h3 class="text-2xl font-bold mb-8 text-center" data-en="Content Themes & Focus Areas" data-ar="موضوعات المحتوى ومجالات التركيز">Content Themes & Focus Areas</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <div class="card p-6 fade-in">
+                        <i data-feather="book-open" class="w-8 h-8 mb-4 text-green-600"></i>
+                        <h4 class="text-xl font-bold mb-3" data-en="Educational Content" data-ar="المحتوى التعليمي">Educational Content</h4>
+                        <ul class="text-sm text-stone-600 dark:text-stone-400 space-y-2 list-disc list-inside">
+                            <li data-en="Seed selection guides" data-ar="أدلة اختيار البذور">Seed selection guides</li>
+                            <li data-en="Planting techniques" data-ar="تقنيات الزراعة">Planting techniques</li>
+                            <li data-en="Pest management" data-ar="إدارة الآفات">Pest management</li>
+                            <li data-en="Seasonal farming tips" data-ar="نصائح الزراعة الموسمية">Seasonal farming tips</li>
+                        </ul>
+                    </div>
+
+                    <div class="card p-6 fade-in" style="animation-delay: 0.1s">
+                        <i data-feather="users" class="w-8 h-8 mb-4 text-blue-600"></i>
+                        <h4 class="text-xl font-bold mb-3" data-en="Success Stories" data-ar="قصص النجاح">Success Stories</h4>
+                        <ul class="text-sm text-stone-600 dark:text-stone-400 space-y-2 list-disc list-inside">
+                            <li data-en="Farmer testimonials" data-ar="شهادات المزارعين">Farmer testimonials</li>
+                            <li data-en="Yield improvements" data-ar="تحسينات الإنتاج">Yield improvements</li>
+                            <li data-en="Case studies" data-ar="دراسات الحالة">Case studies</li>
+                            <li data-en="Community impact" data-ar="تأثير المجتمع">Community impact</li>
+                        </ul>
+                    </div>
+
+                    <div class="card p-6 fade-in" style="animation-delay: 0.2s">
+                        <i data-feather="trending-up" class="w-8 h-8 mb-4 text-purple-600"></i>
+                        <h4 class="text-xl font-bold mb-3" data-en="Innovation Showcase" data-ar="عرض الابتكار">Innovation Showcase</h4>
+                        <ul class="text-sm text-stone-600 dark:text-stone-400 space-y-2 list-disc list-inside">
+                            <li data-en="New seed varieties" data-ar="أصناف البذور الجديدة">New seed varieties</li>
+                            <li data-en="Technology integration" data-ar="تكامل التكنولوجيا">Technology integration</li>
+                            <li data-en="Research updates" data-ar="تحديثات البحث">Research updates</li>
+                            <li data-en="Industry trends" data-ar="اتجاهات الصناعة">Industry trends</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Budget & Investment Section -->
+    <section id="budget" class="py-16 px-4 bg-stone-50 dark:bg-stone-900">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text" data-en="Budget & Investment Planning" data-ar="الميزانية وتخطيط الاستثمار">Budget & Investment Planning</h2>
+
+            <!-- Dynamic Budget Calculator -->
+            <div class="mb-12">
+                <h3 class="text-2xl font-bold mb-8 text-center" data-en="Interactive Budget Calculator" data-ar="حاسبة الميزانية التفاعلية">Interactive Budget Calculator</h3>
+                <div class="card p-8">
+                    <div class="mb-8">
+                        <label for="budgetSlider" class="block text-lg font-semibold mb-4" data-en="Monthly Budget: $" data-ar="الميزانية الشهرية: $">Monthly Budget: $</label>
+                        <input type="range" id="budgetSlider" min="0" max="5000" value="100" step="100" class="w-full h-2 bg-stone-200 rounded-lg appearance-none cursor-pointer">
+                        <div class="flex justify-between text-sm text-stone-600 dark:text-stone-400 mt-2">
+                            <span>$0</span>
+                            <span id="budgetValue" class="text-2xl font-bold text-green-600">$100</span>
+                            <span>$5,000</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <!-- Budget Chart -->
+                        <div class="flex items-center justify-center h-64 md:h-auto">
+                            <canvas id="budgetChart" width="300" height="300"></canvas>
+                        </div>
+
+                        <!-- Budget Breakdown -->
+                        <div>
+                            <h4 class="text-xl font-bold mb-4" data-en="Budget Breakdown" data-ar="تفصيل الميزانية">Budget Breakdown</h4>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center p-3 bg-stone-100 dark:bg-stone-800 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="w-4 h-4 bg-green-500 rounded mr-3"></div>
+                                        <span data-en="Advertising (55%)" data-ar="الإعلان (55%)">Advertising (55%)</span>
+                                    </div>
+                                    <span id="adsBudget" class="font-bold">$55</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-stone-100 dark:bg-stone-800 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="w-4 h-4 bg-blue-500 rounded mr-3"></div>
+                                        <span data-en="Content Creation (35%)" data-ar="إنشاء المحتوى (35%)">Content Creation (35%)</span>
+                                    </div>
+                                    <span id="contentBudget" class="font-bold">$35</span>
+                                </div>
+                                <div class="flex justify-between items-center p-3 bg-stone-100 dark:bg-stone-800 rounded-lg">
+                                    <div class="flex items-center">
+                                        <div class="w-4 h-4 bg-purple-500 rounded mr-3"></div>
+                                        <span data-en="Tools & Analytics (10%)" data-ar="الأدوات والتحليلات (10%)">Tools & Analytics (10%)</span>
+                                    </div>
+                                    <span id="toolsBudget" class="font-bold">$10</span>
+                                </div>
+                            </div>
+
+                            <!-- ROI Projection -->
+                            <div class="mt-6 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                                <h5 class="font-bold text-green-700 mb-2" data-en="Projected ROI" data-ar="العائد المتوقع على الاستثمار">Projected ROI</h5>
+                                <div class="text-2xl font-bold text-green-600" id="roiProjection">160%</div>
+                                <p class="text-sm text-green-600" data-en="Based on industry benchmarks" data-ar="بناءً على معايير الصناعة">Based on industry benchmarks</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Notes & Contact Section -->
+    <section id="planning" class="py-16 px-4">
+        <div class="container mx-auto">
+            <h2 class="text-4xl font-bold text-center mb-12 gradient-text" data-en="Let's Start Planning Together" data-ar="لنبدأ التخطيط معاً">Let's Start Planning Together</h2>
+             <img src="Aware.jpg" alt="Farmer with tablet in a field showing growth charts" class="mx-auto rounded-2xl shadow-2xl max-w-full h-auto mb-12">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <!-- Notes Section -->
+                <div class="card p-8 fade-in">
+                    <h3 class="text-2xl font-bold mb-6" data-en="Your Notes & Requirements" data-ar="ملاحظاتك ومتطلباتك">Your Notes & Requirements</h3>
+                    <textarea id="clientNotes" rows="8" class="w-full p-4 border border-stone-300 dark:border-stone-600 rounded-lg bg-stone-50 dark:bg-stone-800 resize-none focus:ring-2 focus:ring-green-500 focus:border-transparent" placeholder="Share your thoughts, specific requirements, or questions about this proposal..." data-en-placeholder="Share your thoughts, specific requirements, or questions about this proposal..." data-ar-placeholder="شارك أفكارك أو متطلباتك المحددة أو أسئلتك حول هذا الاقتراح..."></textarea>
+                    <button id="sendNotes" class="btn-primary mt-4" data-en="Send Notes via Email" data-ar="إرسال الملاحظات عبر البريد الإلكتروني">Send Notes via Email</button>
+                </div>
+
+                <!-- Contact Section -->
+                <div class="card p-8 fade-in" style="animation-delay: 0.2s">
+                    <h3 class="text-2xl font-bold mb-6" data-en="Ready to Get Started?" data-ar="مستعد للبدء؟">Ready to Get Started?</h3>
+                    <p class="text-stone-600 dark:text-stone-400 mb-6" data-en="Let's discuss how we can help SeedTech achieve its digital growth objectives across Sudan, Uganda, and Oman." data-ar="دعنا نناقش كيف يمكننا مساعدة سيد تك في تحقيق أهداف نموها الرقمي عبر السودان وأوغندا وعمان.">
+                        Let's discuss how we can help SeedTech achieve its digital growth objectives across Sudan, Uganda, and Oman.
+                    </p>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <a href="tel:+905433400087" class="flex items-center justify-center px-4 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors">
+                            <i data-feather="phone" class="w-4 h-4 mr-2"></i>
+                            <span data-en="Call Now" data-ar="اتصل الآن">Call Now</span>
+                        </a>
+                        <a href="https://wa.me/249963777777" target="_blank" class="flex items-center justify-center px-4 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                            <i data-feather="message-circle" class="w-4 h-4 mr-2"></i>
+                            <span data-en="WhatsApp" data-ar="واتساب">WhatsApp</span>
+                        </a>
+                        <a href="mailto:care@branddi.co.site" class="flex items-center justify-center px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors">
+                            <i data-feather="mail" class="w-4 h-4 mr-2"></i>
+                            <span data-en="Email Us" data-ar="راسلنا">Email Us</span>
+                        </a>
+                        <a href="#budget" class="flex items-center justify-center px-4 py-3 bg-amber-600 text-white rounded-lg hover:bg-amber-700 transition-colors">
+                            <i data-feather="arrow-right" class="w-4 h-4 mr-2"></i>
+                            <span data-en="Get Started" data-ar="ابدأ الآن">Get Started</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-stone-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8">
+                <div class="text-3xl font-bold gradient-text mb-4" data-en="Brandi" data-ar="براندي">Brandi</div>
+                <p class="text-stone-400 mb-6" data-en="Cultivating digital growth for agricultural leaders across the Middle East and Africa" data-ar="زراعة النمو الرقمي للقادة الزراعيين عبر الشرق الأوسط وأفريقيا">
+                    Cultivating digital growth for agricultural leaders across the Middle East and Africa
+                </p>
+
+                <!-- Social Links -->
+                <div class="flex justify-center space-x-6 mb-8">
+                    <a href="https://www.facebook.com/profile.php?id=100046358752051" target="_blank" class="text-stone-400 hover:text-white transition-colors">
+                        <i data-feather="facebook" class="w-6 h-6"></i>
+                    </a>
+                    <a href="https://www.instagram.com/brandi.adv/" target="_blank" class="text-stone-400 hover:text-white transition-colors">
+                        <i data-feather="instagram" class="w-6 h-6"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="border-t border-stone-700 pt-8 text-center text-stone-400">
+                <p data-en="© 2025 Brandi. All Rights Reserved. Interactive Proposal for SeedTech." data-ar="© 2025 براندي. جميع الحقوق محفوظة. اقتراح تفاعلي لسيد تك.">
+                    © 2025 Brandi. All Rights Reserved. Interactive Proposal for SeedTech.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Content Modal -->
+    <div id="contentModal" class="modal">
+        <div class="modal-content">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="modalTitle" class="text-2xl font-bold"></h3>
+                <button id="closeModal" class="text-stone-400 hover:text-stone-600">
+                    <i data-feather="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div id="modalContent" class="prose max-w-none dark:prose-invert"></div>
+        </div>
+    </div>
+
+
+    <!-- JavaScript -->
+    <script>
+        // Global variables
+        let currentLanguage = 'en';
+        let channelChart = null;
+        let budgetChart = null;
+        
+        // Regional data for charts
+        const regionalData = {
+            sudan: {
+                labels: ['Facebook', 'LinkedIn', 'Instagram', 'YouTube', 'TikTok'],
+                data: [11000, 881, 182, 125, 28],
+                analysis: {
+                    en: "SeedTech Sudan has a formidable presence on Facebook (11k) with strong engagement rates and a loyal community. The significant following on LinkedIn (881) indicates strong B2B potential, while the rapid growth on Instagram (182, +450%) and TikTok (28, +1500%) shows promising momentum in visual and short-form content.",
+                    ar: "تتمتع سيد تك السودان بحضور قوي على فيسبوك (11 ألف) مع معدلات تفاعل قوية ومجتمع مخلص. المتابعة الكبيرة على لينكد إن (881) تشير إلى إمكانات قوية في مجال الأعمال، بينما النمو السريع على إنستغرام (182، +450%) وتيك توك (28، +1500%) يظهر زخماً واعداً في المحتوى المرئي والقصير."
+                }
+            },
+            uganda: {
+                labels: ['Facebook', 'Instagram', 'TikTok', 'YouTube', 'LinkedIn'],
+                data: [8, 2, 16, 250, 200],
+                analysis: {
+                    en: "The digital presence in Uganda is in its infancy but shows remarkable potential. Interestingly, TikTok (16) leads slightly, suggesting a potential for rapid, viral growth. The new YouTube (250) and LinkedIn (200) channels provide excellent foundations for educational content and B2B networking respectively.",
+                    ar: "الحضور الرقمي في أوغندا في بدايته لكنه يظهر إمكانات ملحوظة. من المثير للاهتمام أن تيك توك (16) يتقدم قليلاً، مما يشير إلى إمكانية نمو سريع وفيروسي. قنوات يوتيوب (250) ولينكد إن (200) الجديدة توفر أسساً ممتازة للمحتوى التعليمي والشبكات التجارية على التوالي."
+                }
+            },
+            oman: {
+                labels: ['Facebook', 'Instagram', 'TikTok', 'YouTube', 'LinkedIn'],
+                data: [18, 4, 16, 300, 500],
+                analysis: {
+                    en: "Oman is a clean slate with tremendous opportunity. With a small but present audience on Facebook (18) and TikTok (16), we can test which platform gains traction fastest. The strong LinkedIn (500) and YouTube (300) presence indicates a tech-savvy, professional audience ready for premium agricultural content.",
+                    ar: "عمان لوحة نظيفة مع فرصة هائلة. مع جمهور صغير لكن موجود على فيسبوك (18) وتيك توك (16)، يمكننا اختبار أي منصة تكتسب زخماً أسرع. الحضور القوي على لينكد إن (500) ويوتيوب (300) يشير إلى جمهور مهني وذكي تقنياً جاهز للمحتوى الزراعي المتميز."
+                }
+            }
+        };
+        
+        // Content calendar data
+        const contentData = {
+            blog: {
+                title: { en: "Blog Post", ar: "مقالة مدونة" },
+                content: { en: "<p>In-depth article about modern farming techniques.</p>", ar: "<p>مقال متعمق حول تقنيات الزراعة الحديثة.</p>" }
+            },
+            tiktok: {
+                title: { en: "TikTok Tip", ar: "نصيحة تيك توك" },
+                content: { en: "<p>A quick video tip for maximizing crop yield.</p>", ar: "<p>فيديو قصير يقدم نصيحة لزيادة إنتاجية المحاصيل.</p>" }
+            },
+            qa: {
+                title: { en: "Farmer Q&A", ar: "أسئلة وأجوبة المزارعين" },
+                content: { en: "<p>Live Q&A session with our agronomy experts.</p>", ar: "<p>جلسة أسئلة وأجوبة مباشرة مع خبراء الزراعة لدينا.</p>" }
+            },
+            blog2: {
+                title: { en: "Blog Post", ar: "مقالة مدونة" },
+                content: { en: "<p>A follow-up article on sustainable agriculture.</p>", ar: "<p>مقال متابعة حول الزراعة المستدامة.</p>" }
+            },
+            competition: {
+                title: { en: "Competition", ar: "مسابقة" },
+                content: { en: "<p>Announcing our new competition for local farmers!</p>", ar: "<p>الإعلان عن مسابقتنا الجديدة للمزارعين المحليين!</p>" }
+            },
+            video: {
+                title: { en: "YouTube Video", ar: "فيديو يوتيوب" },
+                content: { en: "<p>A detailed tutorial on using our latest seed variety.</p>", ar: "<p>فيديو تعليمي مفصل حول استخدام أحدث أصناف البذور لدينا.</p>" }
+            },
+            testimonial: {
+                title: { en: "Testimonial", ar: "شهادة" },
+                content: { en: "<p>Featuring a success story from a farmer in Oman.</p>", ar: "<p>عرض قصة نجاح مزارع من عمان.</p>" }
+            },
+            "ig-reel": {
+                title: { en: "IG Reel", ar: "ريل انستغرام" },
+                content: { en: "<p>A short, engaging reel showcasing our innovative products.</p>", ar: "<p>ريل قصير وجذاب يعرض منتجاتنا المبتكرة.</p>" }
+            }
+        };
+
+        // Channel Priority Data
+        const channelPriorityData = {
+            sudan: [
+                { id: 'facebook', name: 'Facebook', icon: 'facebook', default: 'High' },
+                { id: 'whatsapp', name: 'WhatsApp', icon: 'message-circle', default: 'High' },
+                { id: 'youtube', name: 'YouTube', icon: 'youtube', default: 'Medium' },
+                { id: 'instagram', name: 'Instagram', icon: 'instagram', default: 'Medium' },
+                { id: 'x', name: 'X (Twitter)', icon: 'twitter', default: 'Low' },
+                { id: 'linkedin', name: 'LinkedIn', icon: 'linkedin', default: 'Low' },
+                { id: 'tiktok', name: 'TikTok', icon: 'music', default: 'Potential' },
+            ],
+            oman: [
+                { id: 'linkedin', name: 'LinkedIn', icon: 'linkedin', default: 'High' },
+                { id: 'instagram', name: 'Instagram', icon: 'instagram', default: 'High' },
+                { id: 'youtube', name: 'YouTube', icon: 'youtube', default: 'Medium' },
+                { id: 'facebook', name: 'Facebook', icon: 'facebook', default: 'Medium' },
+                 { id: 'x', name: 'X (Twitter)', icon: 'twitter', default: 'Low' },
+                { id: 'whatsapp', name: 'WhatsApp', icon: 'message-circle', default: 'Potential' },
+                { id: 'tiktok', name: 'TikTok', icon: 'music', default: 'Potential' },
+            ],
+            uganda: [
+                { id: 'facebook', name: 'Facebook', icon: 'facebook', default: 'High' },
+                { id: 'youtube', name: 'YouTube', icon: 'youtube', default: 'High' },
+                { id: 'tiktok', name: 'TikTok', icon: 'music', default: 'Medium' },
+                { id: 'instagram', name: 'Instagram', icon: 'instagram', default: 'Medium' },
+                { id: 'x', name: 'X (Twitter)', icon: 'twitter', default: 'Low' },
+                { id: 'linkedin', name: 'LinkedIn', icon: 'linkedin', default: 'Growing' },
+                 { id: 'whatsapp', name: 'WhatsApp', icon: 'message-circle', default: 'Potential' },
+            ]
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeFeatherIcons();
+            initializeEventListeners();
+            initializeCharts();
+            initializeBudgetCalculator();
+            initializeAnimations();
+            updateLanguage();
+            renderChannelPriorities('sudan'); // Initial render
+        });
+        
+        // Initialize Feather icons
+        function initializeFeatherIcons() {
+            feather.replace();
+        }
+        
+        // Initialize event listeners
+        function initializeEventListeners() {
+            // Theme toggle
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+            
+            // Language toggle
+            document.getElementById('lang-en').addEventListener('click', () => setLanguage('en'));
+            document.getElementById('lang-ar').addEventListener('click', () => setLanguage('ar'));
+            
+            // Mobile menu
+            document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileMenu);
+            document.getElementById('mobile-menu-close').addEventListener('click', toggleMobileMenu);
+            
+            // Region buttons
+            document.querySelectorAll('.region-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => selectRegion(e.target.dataset.region));
+            });
+            document.querySelectorAll('.priority-region-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    document.querySelectorAll('.priority-region-btn').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+                    renderChannelPriorities(e.target.dataset.region);
+                });
+            });
+
+            
+            // Map regions
+            document.querySelectorAll('.map-region').forEach(region => {
+                region.addEventListener('click', (e) => selectRegion(e.target.dataset.region));
+                region.addEventListener('mouseenter', showTooltip);
+                region.addEventListener('mouseleave', hideTooltip);
+            });
+            
+            // Content cards & Calendar events
+            document.querySelectorAll('.content-card, .calendar-event').forEach(card => {
+                card.addEventListener('click', (e) => showContentModal(e.currentTarget.dataset.content));
+            });
+            
+            // Modal close
+            document.getElementById('closeModal').addEventListener('click', closeModal);
+            document.getElementById('contentModal').addEventListener('click', (e) => {
+                if (e.target.id === 'contentModal') closeModal();
+            });
+            
+            // Notes email
+            document.getElementById('sendNotes').addEventListener('click', sendNotes);
+            
+            // Smooth scrolling for navigation
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                    // Close mobile menu if open
+                    document.getElementById('mobile-menu').classList.remove('active');
+                });
+            });
+        }
+        
+        // Theme functions
+        function toggleTheme() {
+            const isDark = document.documentElement.classList.toggle('dark');
+            updateChartThemes(isDark);
+        }
+
+        // Language functions
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById(`lang-${lang}`).classList.add('active');
+            
+            // Update HTML attributes
+            document.documentElement.lang = lang;
+            document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+            
+            // Update body class for Arabic font
+            document.body.classList.toggle('arabic', lang === 'ar');
+            
+            updateLanguage();
+            
+            // Re-render charts with new language
+            if (channelChart) {
+                updateChannelChart(document.querySelector('.region-btn.active').dataset.region);
+            }
+        }
+        
+        function updateLanguage() {
+            document.querySelectorAll('[data-en]').forEach(element => {
+                const key = element.dataset.en;
+                if (currentLanguage === 'ar' && element.dataset.ar) {
+                    element.textContent = element.dataset.ar;
+                } else {
+                    element.textContent = key;
+                }
+            });
+            
+            // Update placeholders
+            document.querySelectorAll('[data-en-placeholder]').forEach(element => {
+                if (currentLanguage === 'ar' && element.dataset.arPlaceholder) {
+                    element.placeholder = element.dataset.arPlaceholder;
+                } else {
+                    element.placeholder = element.dataset.enPlaceholder;
+                }
+            });
+        }
+        
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            document.getElementById('mobile-menu').classList.toggle('active');
+        }
+        
+        // Region selection functions
+        function selectRegion(region) {
+            // Update active region button
+            document.querySelectorAll('.region-btn, .priority-region-btn').forEach(btn => {
+                 if (btn.dataset.region === region) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            
+            
+            // Update map markers
+            document.querySelectorAll('.map-region').forEach(marker => marker.classList.remove('active'));
+            document.getElementById(`${region}-marker`).classList.add('active');
+            
+            // Update chart
+            updateChannelChart(region);
+            
+            // Update analysis text
+            updateAnalysisText(region);
+            
+            // Update regional insights
+            updateRegionalInsights(region);
+
+            // Render channel priorities
+            renderChannelPriorities(region);
+        }
+
+        // Channel Priorities Dropdown
+        function renderChannelPriorities(region) {
+            const container = document.getElementById('channel-priorities-container');
+            container.innerHTML = '';
+            const priorities = channelPriorityData[region];
+            
+            priorities.forEach(channel => {
+                const row = document.createElement('div');
+                row.className = 'flex items-center justify-between p-3 rounded-lg bg-stone-50 dark:bg-stone-800';
+                
+                row.innerHTML = `
+                    <span class="flex items-center">
+                        <i data-feather="${channel.icon}" class="w-5 h-5 mr-3 text-stone-500"></i>
+                        <span class="font-medium">${channel.name}</span>
+                    </span>
+                    <div class="custom-select-wrapper priority-${channel.default}">
+                        <select class="custom-select" onchange="this.parentElement.className = 'custom-select-wrapper priority-' + this.value">
+                            <option value="High" ${channel.default === 'High' ? 'selected' : ''}>High</option>
+                            <option value="Medium" ${channel.default === 'Medium' ? 'selected' : ''}>Medium</option>
+                            <option value="Low" ${channel.default === 'Low' ? 'selected' : ''}>Low</option>
+                            <option value="Potential" ${channel.default === 'Potential' ? 'selected' : ''}>Potential</option>
+                            <option value="Growing" ${channel.default === 'Growing' ? 'selected' : ''}>Growing</option>
+                        </select>
+                    </div>
+                `;
+                container.appendChild(row);
+            });
+            feather.replace();
+        }
+        
+        // Chart functions
+        function initializeCharts() {
+            initializeChannelChart();
+            initializeBudgetChart();
+        }
+        
+        function getChartColors() {
+            const isDark = document.documentElement.classList.contains('dark');
+            return {
+                grid: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                ticks: isDark ? '#a8a29e' : '#57534e',
+            };
+        }
+
+        function updateChartThemes(isDark) {
+            if (channelChart) {
+                const colors = getChartColors();
+                channelChart.options.scales.y.grid.color = colors.grid;
+                channelChart.options.scales.x.grid.color = colors.grid;
+                channelChart.options.scales.y.ticks.color = colors.ticks;
+                channelChart.options.scales.x.ticks.color = colors.ticks;
+                channelChart.update();
+            }
+            if (budgetChart) {
+                budgetChart.update();
+            }
+        }
+        
+        function initializeChannelChart() {
+            const ctx = document.getElementById('channelChart').getContext('2d');
+            const colors = getChartColors();
+            
+            channelChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: regionalData.sudan.labels,
+                    datasets: [{
+                        label: 'Followers',
+                        data: regionalData.sudan.data,
+                        backgroundColor: [
+                            '#3b82f6', // Facebook blue
+                            '#0077b5', // LinkedIn blue
+                            '#e1306c', // Instagram pink
+                            '#ff0000', // YouTube red
+                            '#000000'  // TikTok black
+                        ],
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` ${context.dataset.label}: ${context.formattedValue}`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            type: 'logarithmic',
+                            beginAtZero: true,
+                            grid: { color: colors.grid },
+                            ticks: { color: colors.ticks }
+                        },
+                        x: {
+                            grid: { display: false },
+                            ticks: { color: colors.ticks }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateChannelChart(region) {
+            if (!channelChart) return;
+            
+            const data = regionalData[region];
+            channelChart.data.labels = data.labels;
+            channelChart.data.datasets[0].data = data.data;
+            channelChart.update();
+        }
+        
+        function updateAnalysisText(region) {
+            const analysisElement = document.getElementById('analysisText').querySelector('p');
+            const analysis = regionalData[region].analysis;
+            
+            analysisElement.dataset.en = analysis.en;
+            analysisElement.dataset.ar = analysis.ar;
+            analysisElement.textContent = analysis[currentLanguage];
+        }
+        
+        function updateRegionalInsights(region) {
+            document.querySelectorAll('.regional-insight').forEach(insight => {
+                insight.style.display = insight.dataset.region === region ? 'block' : 'none';
+            });
+        }
+        
+        // Budget calculator functions
+        function initializeBudgetCalculator() {
+            const slider = document.getElementById('budgetSlider');
+            slider.addEventListener('input', updateBudget);
+            updateBudget(); // Initial update
+        }
+        
+        function initializeBudgetChart() {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            
+            budgetChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Advertising', 'Content Creation', 'Tools & Analytics'],
+                    datasets: [{
+                        data: [55, 35, 10],
+                        backgroundColor: ['#22c55e', '#3b82f6', '#8b5cf6'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                             callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed !== null) {
+                                        const total = context.chart.getDatasetMeta(0).total;
+                                        const percentage = ((context.parsed / total) * 100).toFixed(2);
+                                        label += `$${context.parsed.toLocaleString()} (${percentage}%)`;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        function updateBudget() {
+            const budget = parseInt(document.getElementById('budgetSlider').value);
+            
+            // Update budget value display
+            document.getElementById('budgetValue').textContent = `$${budget.toLocaleString()}`;
+            
+            // Calculate breakdown
+            const ads = Math.round(budget * 0.55);
+            const content = Math.round(budget * 0.35);
+            const tools = Math.round(budget * 0.10);
+            
+            // Update breakdown display
+            document.getElementById('adsBudget').textContent = `$${ads.toLocaleString()}`;
+            document.getElementById('contentBudget').textContent = `$${content.toLocaleString()}`;
+            document.getElementById('toolsBudget').textContent = `$${tools.toLocaleString()}`;
+            
+            // Update ROI projection (simplified calculation)
+            const roi = Math.round(150 + (budget / 100) * 10);
+            document.getElementById('roiProjection').textContent = `${roi}%`;
+            
+            // Update budget chart data
+            if (budgetChart) {
+                budgetChart.data.datasets[0].data = [ads, content, tools];
+                budgetChart.update();
+            }
+        }
+
+        // Tooltip functions
+        function showTooltip(e) {
+            const tooltip = document.getElementById('mapTooltip');
+            const tooltipText = e.target.dataset.tooltip;
+            const mapRect = document.getElementById('regionMap').getBoundingClientRect();
+            
+            tooltip.textContent = tooltipText;
+            tooltip.style.left = e.pageX - mapRect.left + 15 + 'px';
+            tooltip.style.top = e.pageY - mapRect.top - 15 + 'px';
+            tooltip.classList.add('show');
+        }
+        
+        function hideTooltip() {
+            document.getElementById('mapTooltip').classList.remove('show');
+        }
+        
+        // Modal functions
+        function showContentModal(contentType) {
+            const modal = document.getElementById('contentModal');
+            const title = document.getElementById('modalTitle');
+            const content = document.getElementById('modalContent');
+            
+            const data = contentData[contentType];
+            title.textContent = data.title[currentLanguage];
+            content.innerHTML = data.content[currentLanguage];
+            
+            modal.classList.add('active');
+        }
+        
+        function closeModal() {
+            document.getElementById('contentModal').classList.remove('active');
+        }
+        
+        // Notes function
+        function sendNotes() {
+            const notes = document.getElementById('clientNotes').value;
+            if (!notes.trim()) {
+                // You can add a more user-friendly notification here
+                console.log("Notes are empty.");
+                return;
+            }
+            const subject = 'SeedTech Proposal - Client Notes';
+            const body = `Dear Brandi Team,\n\nHere are my notes and requirements regarding the SeedTech digital marketing proposal:\n\n${notes}\n\nBest regards,\nSeedTech Team`;
+            
+            const mailtoLink = `mailto:care@branddi.co.site?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+            window.location.href = mailtoLink;
+        }
+        
+        // Animation functions
+        function initializeAnimations() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationPlayState = 'running';
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+            
+            document.querySelectorAll('.fade-in').forEach(el => {
+                observer.observe(el);
+            });
+        }
+    </script>
+</body>
+</html>
